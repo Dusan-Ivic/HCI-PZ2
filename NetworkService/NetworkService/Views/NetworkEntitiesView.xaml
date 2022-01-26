@@ -1,0 +1,115 @@
+﻿<UserControl x:Class="NetworkService.Views.NetworkEntitiesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NetworkService.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="500">
+	<Grid>
+		<StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+				<TextBlock Text="TYPE" Height="Auto" Width="Auto" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+				<ComboBox x:Name="comboBoxEntityType1" ItemsSource="{Binding ComboBoxItems}" SelectedItem="{Binding SelectedEntityTypeToFilter, Mode=TwoWay}" Width="50" Height="22" Margin="5,0,0,0"/>
+
+				<TextBlock Text="ID" Height="Auto" Width="Auto" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0"/>
+				<StackPanel Orientation="Vertical" Margin="5,0,0,0">
+					<RadioButton x:Name="radioButtonLessThan" Content="&lt;" IsChecked="{Binding IsLessThanRadioButtonSelected, Mode=TwoWay}"/>
+					<RadioButton x:Name="radioButtonGreaterThan" Content="&gt;" IsChecked="{Binding IsGreaterThanRadioButtonSelected, Mode=TwoWay}"/>
+				</StackPanel>
+
+				<TextBox x:Name="textBoxIdToFilter" Text="{Binding SelectedIdMarginToFilterText, Mode=TwoWay}" Width="110" Height="20" Margin="5,0,0,0"/>
+
+				<StackPanel Orientation="Vertical" Margin="5,0,0,0">
+					<RadioButton x:Name="radioButtonOutOfRange" Content="Out of range values" IsChecked="{Binding IsOutOfRangeValuesRadioButtonSelected}"/>
+					<RadioButton x:Name="radioButtonExpected" Content="Expected values" IsChecked="{Binding IsExpectedValuesRadioButtonSelected}"/>
+				</StackPanel>
+
+				<Button x:Name="buttonFilter" Content="FILTER" Command="{Binding FilterEntityCommand}" Width="40" Height="30" Margin="6,0,0,0"/>
+				<Button x:Name="buttonReset" Content="RESET" Command="{Binding ResetFilterCommand}" Width="40" Height="30" Margin="6,0,0,0"/>
+			</StackPanel>
+
+			<TextBlock Text="{Binding FilterErrorMessage}" Foreground="Red" Width="115" TextAlignment="Center" HorizontalAlignment="Left" Margin="132,0,0,0"/>
+
+			<DataGrid x:Name="dataGridEntities" ItemsSource="{Binding EntitiesToShow}" SelectedItem="{Binding SelectedEntity}" Background="White" Height="160" Width="470" HorizontalAlignment="Left" Margin="0,5,0,0" RowHeight="20" IsReadOnly="True" SelectionMode="Single" AutoGenerateColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" VerticalScrollBarVisibility="Hidden" ScrollViewer.CanContentScroll="False">
+				<DataGrid.Resources>
+					<Style TargetType="DataGridColumnHeader">
+						<Setter Property="HorizontalContentAlignment" Value="Center"/>
+					</Style>
+					<Style TargetType="DataGridCell">
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="DataGridCell">
+									<Grid Background="{TemplateBinding Background}">
+										<ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+									</Grid>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Style>
+				</DataGrid.Resources>
+				<DataGrid.Columns>
+					<DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="115"/>
+					<DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+					<DataGridTextColumn Header="Type" Binding="{Binding Type.Name}" Width="115"/>
+					<DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="115"/>
+				</DataGrid.Columns>
+			</DataGrid>
+
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
+				<Border BorderBrush="Black" BorderThickness="1">
+					<StackPanel Orientation="Horizontal">
+						<Grid Background="LightGray" Width="30" VerticalAlignment="Center" HorizontalAlignment="Left">
+							<TextBlock Text="IA" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center"/>
+						</Grid>
+						<Grid>
+							<Rectangle Fill="LightGray" Width="{Binding IARectangleWidth}"/>
+							<TextBlock Text="{Binding IAPercentage}" FontFamily="Impact" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+						</Grid>
+					</StackPanel>
+				</Border>
+				<Border BorderBrush="Black" BorderThickness="1" Margin="2,0,0,0">
+					<StackPanel Orientation="Horizontal">
+						<Grid>
+							<Rectangle Fill="LightGray" Width="{Binding IBRectangleWidth}"/>
+							<TextBlock Text="{Binding IBPercentage}" FontFamily="Impact" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+						</Grid>
+						<Grid Background="LightGray" Width="30" VerticalAlignment="Center" HorizontalAlignment="Right">
+							<TextBlock Text="IB" FontWeight="Bold"  TextAlignment="Center" VerticalAlignment="Center"/>
+						</Grid>
+					</StackPanel>
+				</Border>
+
+				
+			</StackPanel>
+
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,15,0,0">
+				<StackPanel Orientation="Vertical" VerticalAlignment="Top">
+					<TextBlock Text="Id: " Height="Auto" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,2,0,0"/>
+					<TextBlock Text="Name: " Height="Auto" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,20,0,0"/>
+					<TextBlock Text="Type: " Height="Auto" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,22,0,0"/>
+				</StackPanel>
+
+				<StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="20,0,0,0">
+					<TextBox x:Name="textBoxId" Text="{Binding CurrentEntity.TextId, Mode=TwoWay}" Width="150"/>
+					<TextBlock Text="{Binding CurrentEntity.ValidationErrors[Id]}" Foreground="Red" Width="150"/>
+					<TextBox x:Name="textBoxName" Text="{Binding CurrentEntity.Name, Mode=TwoWay}" Width="150" Margin="0,5,0,0"/>
+					<TextBlock Text="{Binding CurrentEntity.ValidationErrors[Name]}" Foreground="Red" Width="150"/>
+					<ComboBox x:Name="comboBoxEntityType2" ItemsSource="{Binding ComboBoxItems}" SelectedItem="{Binding CurrentEntityType.Name, Mode=TwoWay}" Width="150" Margin="0,5,0,0"/>
+					<TextBlock Text="{Binding CurrentEntityType.ValidationErrors[Name]}" Foreground="Red" Width="150"/>
+				</StackPanel>
+
+				<Grid Width="80" Height="80" Margin="20,0,0,0" Background="LightGray">
+					<Border BorderBrush="DarkGray" BorderThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+						<Image Source="{Binding CurrentEntityType.ImgSrc, Mode=TwoWay}" Stretch="Uniform"/>
+					</Border>
+				</Grid>
+
+				<StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10,0,0,0">
+					<Button x:Name="buttonAdd" Content="ADD" Width="50" Command="{Binding AddEntityCommand}"/>
+					<Button x:Name="buttonDelete" Content="DELETE" Width="50" Command="{Binding DeleteEntityCommand}" Margin="0,10,0,0"/>
+				</StackPanel>
+			</StackPanel>
+		</StackPanel>
+	</Grid>
+</UserControl>

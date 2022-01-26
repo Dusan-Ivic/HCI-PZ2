@@ -1,0 +1,56 @@
+﻿<Window x:Class="NetworkService.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NetworkService"
+		xmlns:views="clr-namespace:NetworkService.Views"
+		xmlns:viewModels="clr-namespace:NetworkService.ViewModel"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="500" ResizeMode="NoResize">
+	<Window.DataContext>
+		<viewModels:MainWindowViewModel/>
+	</Window.DataContext>
+	<Window.Resources>
+		<DataTemplate DataType="{x:Type viewModels:NetworkEntitiesViewModel}">
+			<views:NetworkEntitiesView/>
+		</DataTemplate>
+
+		<DataTemplate DataType="{x:Type viewModels:NetworkDisplayViewModel}">
+			<views:NetworkDisplayView/>
+		</DataTemplate>
+
+		<DataTemplate DataType="{x:Type viewModels:MeasurementGraphViewModel}">
+			<views:MeasurementGraphView/>
+		</DataTemplate>
+	</Window.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+
+		<DockPanel Grid.Row="0" Margin="10">
+			<Menu DockPanel.Dock="Top">
+				<MenuItem Command="{Binding NavCommand}" CommandParameter="NetworkEntities">
+					<MenuItem.Header>
+						<TextBlock Text="Network Entities" Width="140" TextAlignment="Center"/>
+					</MenuItem.Header>
+				</MenuItem>
+				<MenuItem Command="{Binding NavCommand}" CommandParameter="NetworkDisplay">
+					<MenuItem.Header>
+						<TextBlock Text="Network Display" Width="140" TextAlignment="Center"/>
+					</MenuItem.Header>
+				</MenuItem>
+				<MenuItem Command="{Binding NavCommand}" CommandParameter="MeasurementGraph">
+					<MenuItem.Header>
+						<TextBlock Text="Measurement Graph" Width="140" TextAlignment="Center"/>
+					</MenuItem.Header>
+				</MenuItem>
+			</Menu>
+		</DockPanel>
+		<Grid Grid.Row="1">
+			<ContentControl Content="{Binding CurrentViewModel}"/>
+		</Grid>
+	</Grid>
+</Window>
