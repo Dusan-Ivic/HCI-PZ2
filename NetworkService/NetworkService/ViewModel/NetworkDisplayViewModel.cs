@@ -111,6 +111,16 @@ namespace NetworkService.ViewModel
 						CanvasCollection[draggingSourceIndex].Resources.Remove("data");
 						BorderBrushCollection[draggingSourceIndex] = Brushes.DarkGray;
 
+						// Crtanje linije se prekida ako je entitet pomeren na drugu canvas kontrolu izmedju postavljanja tacaka
+						if (sourceCanvasIndex != -1)
+						{
+							isLineSourceSelected = false;
+							sourceCanvasIndex = -1;
+							linePoint1 = new Point();
+							linePoint2 = new Point();
+							currentLine = new MyLine();
+						}
+
 						UpdateLinesForCanvas(draggingSourceIndex, index);
 
 						draggingSourceIndex = -1;
@@ -223,7 +233,7 @@ namespace NetworkService.ViewModel
 					}
 					else
 					{
-						// SourceIndex = DestinationIndex
+						// Pocetak i kraj linije su u istom canvasu
 
 						isLineSourceSelected = false;
 
@@ -235,7 +245,7 @@ namespace NetworkService.ViewModel
 			}
 			else
 			{
-				// Taken = False
+				// Canvas na koji se postavlja tacka nije zauzet
 
 				isLineSourceSelected = false;
 
@@ -267,6 +277,7 @@ namespace NetworkService.ViewModel
 			}
 		}
 
+		// Da li je canvas povezan linijama
 		private bool IsCanvasConnected(int canvasIndex)
 		{
 			foreach (MyLine line in LineCollection)
@@ -279,6 +290,7 @@ namespace NetworkService.ViewModel
 			return false;
 		}
 
+		// Da li vec postoji linija izmedju dva canvasa
 		private bool DoesLineAlreadyExist(int source, int destination)
 		{
 			foreach (MyLine line in LineCollection)
@@ -328,6 +340,7 @@ namespace NetworkService.ViewModel
 			}
 		}
 
+		// Centralna tacka na canvasu
 		private Point GetPointForCanvasIndex(int canvasIndex)
 		{
 			double x = 0, y = 0;
@@ -364,6 +377,7 @@ namespace NetworkService.ViewModel
 			return -1;
 		}
 
+		// Poziva se iz MainWindowViewModel-a
 		public void UpdateEntityOnCanvas(Entity entity)
 		{
 			int canvasIndex = GetCanvasIndexForEntityId(entity.Id);
